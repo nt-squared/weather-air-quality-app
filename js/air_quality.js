@@ -46,7 +46,7 @@ export const airContent = [
 ]
 
 export function getAirQuality(lat, lon) {
-    return fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=f3a5cef19c155a0860cd1bcbcc3e3977`)
+    return fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=f3a5cef19c155a0860cd1bcbcc3e3977`)
         .then(async (res) => await res.json())
         .then(data => {
             console.log(data);
