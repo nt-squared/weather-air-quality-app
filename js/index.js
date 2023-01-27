@@ -1,9 +1,8 @@
 import { getAirQuality, airContent } from "./air_quality.js"
+import key from "./config.js";
 
 const searchInput = document.querySelector('#search-input');
 const DEFAULT_VALUE = '--';
-
-const API_ID = 'f3a5cef19c155a0860cd1bcbcc3e3977';
 
 let url = 'https://api.openweathermap.org/data/2.5/weather?units=metric';
 
@@ -16,7 +15,7 @@ navigator.geolocation.getCurrentPosition(success, error);
 function success(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_ID}&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`)
         .then(async (res) => await res.json())
         .then(data => {
             renderWeather(data);
@@ -26,7 +25,7 @@ function success(position) {
             alert("Error getting weather.")
         });
 
-    getAirQuality(latitude, longitude)
+    getAirQuality(latitude, longitude, key)
         .then(renderAirQuality)
         .catch(error => {
             console.error(error);
@@ -92,14 +91,15 @@ searchInput.addEventListener('change', (event) => {
         event.target.value = "";
         return
     }
+
     // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-    fetch(url + `&q=${cityName}&appid=${API_ID}`)
+    fetch(url + `&q=${cityName}&appid=${key}`)
         .then(async (res) => {
             const data = await res.json();
             renderWeather(data);
 
             const { coord: { lat, lon } } = data;
-            getAirQuality(lat, lon)
+            getAirQuality(lat, lon, key)
                 .then(renderAirQuality)
                 .catch(error => {
                     console.error(error);
